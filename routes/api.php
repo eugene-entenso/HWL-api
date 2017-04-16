@@ -16,3 +16,13 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+//Route::group(['middleware' => [/*'api', 'cors'*/]], function () {
+Route::post('register', 'UserController@register');
+Route::get('confirm/{code}', 'UserController@confirm');
+Route::post('login', 'UserController@login');
+Route::group(['prefix' => 'v1', 'middleware' => 'jwt.auth'], function () {
+    Route::get('users', 'UserController@index');
+});
+//});
