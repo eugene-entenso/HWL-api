@@ -15,7 +15,17 @@ class UserController extends Controller
      */
     public function index()
     {
-        return response()->json(['users' => User::all()]);
+        $users = [];
+        foreach (User::with(['roles'])->get() as $user) {
+            $users[] = [
+                'status' => $user->status,
+                'role' => $user->roles[0]->name,
+                'name' => $user->name,
+                'email' => $user->email,
+            ];
+        }
+
+        return response()->json(['users' => $users]);
     }
 
     /**

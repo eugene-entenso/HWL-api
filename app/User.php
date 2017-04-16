@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Validator;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 /**
  * Class User
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 class User extends Authenticatable
 {
     use Notifiable;
+    use EntrustUserTrait;
 
     protected $table = 'user';
     protected $errors = [];
@@ -43,6 +45,14 @@ class User extends Authenticatable
         'email' => 'required|unique:user|max:64',
         'password' => 'required|max:255',
     ];
+
+    /**
+     * The roles that belong to the user.
+     */
+    public function roles()
+    {
+        return $this->belongsToMany('App\Role', 'role_user');
+    }
 
     /**
      * @param array $data
